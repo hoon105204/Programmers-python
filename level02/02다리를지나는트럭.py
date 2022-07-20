@@ -1,3 +1,5 @@
+# https://school.programmers.co.kr/learn/courses/30/lessons/42583
+
 # 내가 작성한 방법1
 def solution(bridge_length, weight, truck_weights):
     spoint = truck_weights

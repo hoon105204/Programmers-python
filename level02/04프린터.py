@@ -1,3 +1,4 @@
+# https://school.programmers.co.kr/learn/courses/30/lessons/42587
 def solution(priorities, location):
     mylist=[]
     for i in range(len(priorities)):
@@ -22,6 +23,6 @@ def solution(priorities, location):
         print(answer, mylist)
     return answer
 
-priorities, location = [1, 1, 9, 1, 1, 1], 0    
+priorities, location = [1, 1, 9, 1, 1, 1], 0
 print(solution(priorities, location))
     

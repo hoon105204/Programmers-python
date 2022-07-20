@@ -1,3 +1,5 @@
+# https://school.programmers.co.kr/learn/courses/30/lessons/42586
+
 # 남은 일수 계산 함수
 def days(no,speed):
     if (100-no)%speed!=0:
