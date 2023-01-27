@@ -46,3 +46,4 @@ def closeWord(word1, word2):
 
 
 print(solution("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]))
+
