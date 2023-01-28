@@ -14,11 +14,11 @@ def solution(answers):
         z = i%len(user3)
 
         if user1[x] == answers[i]:
-            score[0] = score[0]+1
+            score[0] += 1
         if user2[y] == answers[i]:
-            score[1] = score[1]+1
+            score[1] += 1
         if user3[z] == answers[i]:
-            score[2] = score[2]+1
+            score[2] += 1
 
     for i in range(3):
         if(max(score)==score[i]):
