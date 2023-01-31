@@ -1,49 +1,20 @@
 # https://school.programmers.co.kr/learn/courses/30/lessons/42883
 
 def solution(number, k):
-    tmp_list = []
-    answer = ""
-    rest = ""
-    forward = ""
+    tmp_list = [number[0]]
 
-    for i in range(len(number)):
-        numb = int(number[i])
+    for numb in number[1:]:
+        while tmp_list and tmp_list[-1] < numb and k > 0:
+            k -= 1
+            tmp_list.pop()
+        tmp_list.append(numb)
 
-        if not tmp_list:
-            tmp_list.append(numb)
-            continue
-        print("i: ", i)
-        for j in range(len(tmp_list)):
-            idx = len(tmp_list) - (j + 1)
-            print("val: ", tmp_list[idx], ", numb: ", numb)
+    if k != 0:
+        tmp_list = tmp_list[:-k]
 
-            if tmp_list[idx] >= numb:
-                tmp_list.append(numb)
-                break
-            else:
-                tmp_list.pop()
-                k -= 1
-                print("tmp_list: ", tmp_list, k)
-
-            if k == 0:
-                break
-
-        forward = ''.join(str(s) for s in tmp_list)
-        print("[k: ", k,"], forward: ", forward, tmp_list, " number[i:]: ",number[i:])
-        if k != 0:
-            answer = forward[:-k]
-            print(k)
-        else:
-            answer = forward + number[i:]
-            break
-
-    return answer
+    return ''.join(tmp_list)
 
 
-number = "9146"
-k = 2
-print(solution(number, k))
-
-number = "98876554321"
-k = 6
+number = "131331131"
+k = 4
 print(solution(number, k))
