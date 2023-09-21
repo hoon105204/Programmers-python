@@ -48,6 +48,7 @@ class Car():
         print('Succeed! price increased.')
 
     # static 메서드
+    # 유연한 함수를 구현
     @staticmethod
     def is_bmw(inst):
         if inst._company == 'Bmw':
@@ -59,6 +60,8 @@ class Car():
 car1 = Car('Ferrari1', {'color': 'White1', 'horsepower': 4001, 'price': 80001})
 car2 = Car('Bmw', {'color': 'White2', 'horsepower': 4002, 'price': 80002})
 car3 = Car('Ferrari3', {'color': 'White3', 'horsepower': 4003, 'price': 80003})
+
+print(car1)
 
 # 클래스 변수 값 공유
 print(car1.car_count)
@@ -121,3 +124,7 @@ Car.raise_price(1.3)
 print(car1.get_price())
 print(car1.get_price_culc())
 
+print(car1.is_bmw(car1))
+print(car1.is_bmw(car2))
+print(car2.is_bmw(car2))
+print(Car.is_bmw(car2))
