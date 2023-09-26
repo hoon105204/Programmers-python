@@ -57,7 +57,7 @@ print(sum(range(1, 11)))
 print(reduce(lambda x, t: x + t, range(1, 11)))
 
 # callable : 호출 연산자 -> 메소드 형태로 호출 가능한지 확인
-print(callable(str), callable(A),  callable(var_func), callable(3.14))
+print(callable(str), callable(A), callable(var_func), callable(3.14))
 
 # partial : 인수 고정 -> 콜백 함수 사용
 from operator import mul
@@ -65,10 +65,31 @@ from functools import partial
 
 print(mul(10, 10))
 five = partial(mul, 5)  # 5 * ?
+six = partial(five, 6)
 
 print(five(10))
+print(six())
+# print(six(2)) # 에러, 이미 2개의 인자가 고정되었기 때문
 
+print([five(i) for i in range(1, 11)])
 
+print()
+print()
 
+# 파이썬 변수 범위(scope)
+# global
+g = 30
+def func_v1(a):
+    # local
+    global g
+    print(a)
+    print(g)
+    g = 40
 
+print('g >>', g)
+func_v1(10)
+print('g >>', g)
 
+# 클로저(Clouser) 사용 이유
+# 서버 프로그래밍 -> 동시성(Concurrency)제어 -> 메모리 공간에 여러 자원이 접근 -> 교착상태(Dead Lock)
+# 메모리를 공유하지 않고 메시지 전달로 처리하기 위한 언어 등장
