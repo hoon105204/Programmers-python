@@ -92,4 +92,122 @@ print('g >>', g)
 
 # 클로저(Clouser) 사용 이유
 # 서버 프로그래밍 -> 동시성(Concurrency)제어 -> 메모리 공간에 여러 자원이 접근 -> 교착상태(Dead Lock)
-# 메모리를 공유하지 않고 메시지 전달로 처리하기 위한 언어 등장
+# 메모리를 공유하지 않고 메시지 전달로 처리하기 위한 언어 등장 -> 클로저는 종료시에 값을 기억함(상태를 기억)
+# 클로저는 공유하되 변경되지 않는(Immutable, Read Only) -> 함수형 프로그래밍과 연결됨
+# 클로저는 불변자료구조 및 atom, stm -> 멀티스레스(Coroutine) 프로그래밍에 강점이 되는 병행성 처리
+
+
+class Averager():
+    # 클래스로 함수는 종료되었지만 값을 기억하도록 구현
+    def __init__(self):
+        self._series = []
+
+    def __call__(self, v):
+        self._series.append(v)
+        print('inner >> {} / {}'.format(self._series, len(self._series)))
+        return sum(self._series) / len(self._series)
+
+
+averager_cls = Averager()
+
+print(averager_cls(10))
+print(averager_cls(20))
+print(averager_cls(30))
+
+
+def closure_ex1():
+    # 자유 변수
+    # 클로저 영역
+    series = []
+    def averager(v):
+        series.append(v)
+        print('inner >> {} / {}'.format(series, len(series)))
+        return sum(series) / len(series)
+    # 함수 자체를 리턴해서 함수의 바깥 영역을 계속 기억
+    return averager
+
+
+avg_closure1 = closure_ex1()
+
+print(avg_closure1(20))
+print(avg_closure1(40))
+print(avg_closure1(60))
+
+# function inspection
+print(dir(avg_closure1))
+print(dir(avg_closure1.__code__))
+print(avg_closure1.__code__.co_freevars)    # 자유변수 출력
+print(avg_closure1.__closure__[0].cell_contents)    # [20, 40, 60] 값을 가지고 있음
+
+# 잘못된 클로저 사용 -> 사용 가능하게 변경(비추)
+def closure_ex2():
+    # free variable
+    cnt = 0
+    total = 0
+    def averager(v):
+        nonlocal cnt, total
+        cnt += 1
+        total += v
+        return total / cnt
+    return averager
+
+
+avg_closure2 = closure_ex2()
+print(avg_closure2(10))
+print(avg_closure2(20))
+print(avg_closure2(30))
+
+# 데코레이터(정말 중요!) -> 클로저 이해해야 함
+# 1. 중복제거, 코드 간결, 공통 함수(로깅, 프레임워크, 유효성 체크 등) 작성
+# 2. 특정 기능에 한정된 함수는 단일 함수로 작성하는것이 유리, 디버깅 불편
+
+import time
+
+def perf_clock(func):
+    def perf_clocked(*args):
+        # 함수 시작 시간
+        st = time.perf_counter()
+        # 함수 실행
+        result = func(*args)
+        # 함수 종료 시간
+        et = time.perf_counter() - st
+        # 실행 함수명
+        name = func.__name__
+        # 함수 매개변수
+        arg_str = ', '.join(repr(arg) for arg in args)
+        # 결과 출력
+        print('[%0.5fs] %s(%s) -> %r' % (et, name, arg_str, result))
+        return result
+    return perf_clocked
+
+
+def time_func(seconds):
+    time.sleep(seconds)
+
+def sum_func(*numbers):
+    return sum(numbers)
+
+# 데코레이터 미사용
+none_deco1 = perf_clock(time_func)
+none_deco2 = perf_clock(sum_func)
+
+print('-'*40, 'Called None Decorator -> time_func')
+none_deco1(1.5)
+
+print('-'*40, 'Called None Decorator -> sum_func')
+none_deco2(100, 200, 300, 400, 500)
+
+# 데코레이터 사용
+@perf_clock
+def time_func(seconds):
+    time.sleep(seconds)
+
+@perf_clock
+def sum_func(*numbers):
+    return sum(numbers)
+
+print('-'*40, 'Called Decorator -> time_func')
+time_func(1.5)
+
+print('-'*40, 'Called Decorator -> sum_func')
+sum_func(100, 200, 300, 400, 500)
